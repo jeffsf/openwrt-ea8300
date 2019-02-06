@@ -16,19 +16,22 @@ START=99
 boot() {
 	. /lib/functions.sh
 
+	local tag="zlinksys_recovery DEVELOPER MODE -- REMOVE FOR RELEASES:"
+
 	case $(board_name) in
-		linksys,ea6350v3)
+		linksys,ea6350v3|\
+		linksys,ea8300)
 			# make sure auto_recovery in uboot is always on
 			IS_AUTO_RECOVERY="$(fw_printenv -n auto_recovery)"
 			if [ "$IS_AUTO_RECOVERY" != "yes" ] ; then
 				fw_setenv auto_recovery yes
-				echo "Linksys EA6350v3: fw_setenv: auto_recovery has been set to yes"
+				echo "${tag}: fw_setenv: auto_recovery has been set to yes"
 			fi
 			# reset the boot counter
 			fw_setenv boot_count 0
 			mtd resetbc s_env
-			echo "Linksys EA6350v3: boot counter has been reset"
-			echo "Linksys EA6350v3: boot_part=$(fw_printenv -n boot_part)"
+			echo "${tag}: boot counter has been reset"
+			echo "${tag}: boot_part=$(fw_printenv -n boot_part)"
 			;;
 	esac
 }

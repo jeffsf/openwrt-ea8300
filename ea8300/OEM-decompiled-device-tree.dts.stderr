@@ -1,0 +1,59 @@
+Warning (reg_format): "reg" property in /soc/mdio@90000/ethernet-phy@0 has invalid length (4 bytes) (#address-cells == 1, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/mdio@90000/ethernet-phy@3 has invalid length (4 bytes) (#address-cells == 1, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/mdio@90000/ethernet-phy@4 has invalid length (4 bytes) (#address-cells == 1, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/mdio@90000/ethernet-phy@1 has invalid length (4 bytes) (#address-cells == 1, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/mdio@90000/ethernet-phy@2 has invalid length (4 bytes) (#address-cells == 1, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@380000 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@b880000 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@780000 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@200000 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@6280000 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@700000 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@a80000 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@300000 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@680000 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@b780000 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@100000 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@0 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@740000 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@480000 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@5f80000 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (reg_format): "reg" property in /soc/qcom,nand@7980000/partition@400000 has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Warning (unit_address_vs_reg): Node /soc/ssphy@1 has a unit name, but no reg property
+Warning (unit_address_vs_reg): Node /soc/counter has a reg or ranges property, but no unit name
+Warning (unit_address_vs_reg): Node /soc/ad-hoc-bus has a reg or ranges property, but no unit name
+Warning (unit_address_vs_reg): Node /soc/gpio_keys/button@1 has a unit name, but no reg property
+Warning (unit_address_vs_reg): Node /soc/gpio_keys/button@0 has a unit name, but no reg property
+Warning (unit_address_vs_reg): Node /memory has a reg or ranges property, but no unit name
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@380000
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@380000
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@b880000
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@b880000
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@780000
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@780000
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@200000
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@200000
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@6280000
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@6280000
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@700000
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@700000
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@a80000
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@a80000
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@300000
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@300000
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@680000
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@680000
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@b780000
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@b780000
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@100000
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@100000
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@0
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@0
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@740000
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@740000
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@480000
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@480000
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@5f80000
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@5f80000
+Warning (avoid_default_addr_size): Relying on default #address-cells value for /soc/qcom,nand@7980000/partition@400000
+Warning (avoid_default_addr_size): Relying on default #size-cells value for /soc/qcom,nand@7980000/partition@400000

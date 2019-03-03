@@ -38,6 +38,15 @@ comfast,cf-e110n-v2)
 	ucidef_set_led_rssi "rssimediumhigh" "RSSIMEDIUMHIGH" "$boardname:green:rssimediumhigh" "wlan0" "51" "100"
 	ucidef_set_led_rssi "rssihigh" "RSSIHIGH" "$boardname:green:rssihigh" "wlan0" "76" "100"
 	;;
+comfast,cf-e120a-v3)
+	ucidef_set_led_netdev "lan" "LAN" "$boardname:green:lan" "eth0"
+	ucidef_set_led_switch "wan" "WAN" "$boardname:green:wan" "switch0" "0x04"
+	ucidef_set_rssimon "wlan0" "200000" "1"
+	ucidef_set_led_rssi "rssilow" "RSSILOW" "$boardname:red:rssilow" "wlan0" "1" "100"
+	ucidef_set_led_rssi "rssimediumlow" "RSSIMEDIUMLOW" "$boardname:red:rssimediumlow" "wlan0" "26" "100"
+	ucidef_set_led_rssi "rssimediumhigh" "RSSIMEDIUMHIGH" "$boardname:green:rssimediumhigh" "wlan0" "51" "100"
+	ucidef_set_led_rssi "rssihigh" "RSSIHIGH" "$boardname:green:rssihigh" "wlan0" "76" "100"
+	;;
 dlink,dir-859-a1)
 	ucidef_set_led_switch "internet" "WAN" "$boardname:green:internet" "switch0" "0x20"
 	;;
@@ -52,7 +61,7 @@ etactica,eg200)
 	;;
 glinet,gl-ar150)
 	ucidef_set_led_netdev "wan" "WAN" "$boardname:green:wan" "eth0"
-	ucidef_set_led_netdev "lan" "LAN" "$boardname:green:lan" "eth1"
+	ucidef_set_led_switch "lan" "LAN" "$boardname:green:lan" "switch0" "0x02"
 	;;
 glinet,gl-x750)
 	ucidef_set_led_netdev "wan" "WAN" "$boardname:green:wan" "eth0"
@@ -119,7 +128,7 @@ tplink,tl-wr941-v4)
 	ucidef_set_led_switch "lan3" "LAN3" "tp-link:green:lan3" "switch0" "0x08"
 	ucidef_set_led_switch "lan4" "LAN4" "tp-link:green:lan4" "switch0" "0x10"
 	;;
-tplink,tl-wr740nd-v4|\
+tplink,tl-wr740n-v4|\
 tplink,tl-wr741nd-v4|\
 tplink,tl-wr841-v8|\
 tplink,tl-wr842n-v2)

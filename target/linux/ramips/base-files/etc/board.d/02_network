@@ -108,7 +108,6 @@ ramips_setup_interfaces()
 	mtc,wr1201|\
 	mzk-750dhp|\
 	mzk-w300nh2|\
-	netgear,r6120|\
 	nixcore-x1-8M|\
 	nixcore-x1-16M|\
 	oy-0001|\
@@ -124,11 +123,11 @@ ramips_setup_interfaces()
 	unielec,u7621-06-512m-64m|\
 	vr500|\
 	wavlink,wl-wn570ha1|\
+	wavlink,wl-wn575a3|\
 	wf-2881|\
 	whr-g300n|\
 	mqmaker,witi-256m|\
 	mqmaker,witi-512m|\
-	wl-wn575a3|\
 	wndr3700v5|\
 	youku-yk1|\
 	zbt-ape522ii|\
@@ -162,6 +161,7 @@ ramips_setup_interfaces()
 	ravpower,wd03|\
 	tama,w06|\
 	tplink,tl-mr3020-v3|\
+	tplink,tl-wr802n-v4|\
 	u25awf-h1|\
 	wli-tx4-ag300n|\
 	wmdr-143n|\
@@ -199,6 +199,7 @@ ramips_setup_interfaces()
 		ucidef_add_switch "switch0" \
 			"0:wan" "1:lan" "2:lan" "3:lan" "4:lan" "6t@eth0"
 		;;
+	belkin,f9k1109v1|\
 	rt-n15|\
 	wl-351)
 		ucidef_add_switch "switch0" \
@@ -319,6 +320,10 @@ ramips_setup_interfaces()
 		ucidef_add_switch "switch0" \
 			"1:lan" "2:lan" "3:lan" "4:lan" "5:lan" "0:wan" "6@eth0"
 		;;
+	iodata,wn-ac1167gr)
+		ucidef_add_switch "switch1" \
+			"1:lan:4" "2:lan:3" "3:lan:2" "4:lan:1" "0:wan" "6@eth0"
+		;;
 	kn_rf)
 		ucidef_add_switch "switch0" \
 			"0:wan" "1:lan" "2:lan" "3:lan" "4:lan" "6@eth0"
@@ -336,6 +341,10 @@ ramips_setup_interfaces()
 		ucidef_add_switch "switch0" \
 			"0:lan" "1:lan" "2:lan" "3:lan" "6t@eth0"
 		ucidef_set_interface_wan "usb0"
+		;;
+	netgear,r6120)
+		ucidef_add_switch "switch0" \
+			"0:lan:4" "1:lan:3" "2:lan:2" "3:lan:1" "4:wan" "6@eth0"
 		;;
 	hc5761)
 		ucidef_add_switch "switch0" \
@@ -475,6 +484,10 @@ ramips_setup_macs()
 		lan_mac=$(macaddr_setbit_la "$lan_mac")
 		wan_mac=$(macaddr_add "$lan_mac" 1)
 		;;
+	belkin,f9k1109v1)
+		wan_mac=$(mtd_get_mac_ascii uboot-env HW_WAN_MAC)
+		lan_mac=$(mtd_get_mac_ascii uboot-env HW_LAN_MAC)
+		;;
 	br-6475nd)
 		lan_mac=$(cat /sys/class/net/eth0/address)
 		wan_mac=$(mtd_get_mac_binary devdata 7)
@@ -524,6 +537,9 @@ ramips_setup_macs()
 		lan_mac=`mtd_get_mac_ascii bdinfo "Vfac_mac "`
 		[ -n "$lan_mac" ] || lan_mac=$(cat /sys/class/net/eth0/address)
 		wan_mac=$(macaddr_add "$lan_mac" 1)
+		;;
+	iodata,wn-ac1167gr)
+		wan_mac=$(macaddr_add "$(mtd_get_mac_binary Factory 4)" -1)
 		;;
 	iodata,wn-ax1167gr|\
 	iodata,wn-gx300gr)

@@ -156,6 +156,12 @@ define U-Boot/orangepi_zero
   BUILD_DEVICES:=sun8i-h2-plus-orangepi-zero
 endef
 
+define U-Boot/orangepi_one
+  BUILD_SUBTARGET:=cortexa7
+  NAME:=Orange Pi One (H3)
+  BUILD_DEVICES:=sun8i-h3-orangepi-one
+endef
+
 define U-Boot/orangepi_pc
   BUILD_SUBTARGET:=cortexa7
   NAME:=Orange Pi PC (H3)
@@ -202,6 +208,12 @@ define U-Boot/pine64_plus
   BUILD_DEVICES:=sun50i-a64-pine64-plus
   DEPENDS:=+PACKAGE_u-boot-pine64_plus:arm-trusted-firmware-sunxi
   UENV:=a64
+endef
+
+define U-Boot/Sinovoip_BPI_M2_Plus
+  BUILD_SUBTARGET:=cortexa7
+  NAME:=Bananapi M2 Plus
+  BUILD_DEVICES:=sun8i-h3-bananapi-m2-plus
 endef
 
 define U-Boot/sopine_baseboard
@@ -254,12 +266,14 @@ UBOOT_TARGETS := \
 	nanopi_neo2 \
 	orangepi_zero \
 	orangepi_r1 \
+	orangepi_one \
 	orangepi_pc \
 	orangepi_plus \
 	orangepi_2 \
 	orangepi_pc2 \
 	pangolin \
 	pine64_plus \
+	Sinovoip_BPI_M2_Plus \
 	sopine_baseboard \
 	orangepi_zero_plus
 

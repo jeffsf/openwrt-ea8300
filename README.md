@@ -12,40 +12,36 @@ The OpenWrt sources incorporated herein are maintained at [https://git.openwrt.o
 
 ## Current Status
 
-<span style="font-size:larger;">***Experimental -- Booting initramfs from memory using U-Boot***</span>
+<span style="font-size:larger;">***Experimental -- Requires U-Boot Environment Changes***</span>
 
 
 ### Mainly Operational
 
-* Kernel -- boots and runs SMP from memory (initramfs)
-* serial0 -- available, "console" output and login
-* NAND -- read confirmed, write not tested
-* eth0, eth1 -- available, MAC addresses need work
-* Networking -- available, including SSH access
-* LEDs -- operational
-* USB -- operational, but resets under heavy load
+* Kernel
+* serial0 and console
+* NAND
+* eth0, eth1
+* Networking -- switch re-configuration has challenges
+* Wireless
+* LEDs
+* USB
+* sysupgrade -- some strangeness around next-boot partition
+* factory images -- can be loaded through OEM GUI; U-Boot envirinment changes still needed
+
 
 ### Limited Functionality
 
 * Switch -- available, re-configuration seems to fail
-* Wireless
-  * IPQ4019 x2, QCA9888 recognized
-  * Firmware download seems to work ("classic" and "CT" ath10k)
-    * Automated extraction of config data from 0:ART has "timing" issue
-    	* Seems to happen *after* drivers load
-    	* Manual inclusion of the three config files required for memory-based boot
-  * No AP beacons seen, monitor functionality not yet examined
-  * *Note: The second 5 GHz radio, QCA9888 on PCI 0000:01:00.0, is limited to ch. 100 (5.5 GHz) and above by the ART data and the data in the OEM firmware's cal data. This is perhaps due to RF design optimization and/or interoperation with 2.4 GHz, such as the two, shared antennas.*
+* Easy install -- still requires serial access to 
+
+*Note: The second 5 GHz radio, QCA9888 on PCI 0000:01:00.0, is limited to ch. 100 (5.5 GHz) and above by the ART data and the data in the OEM firmware's cal data. This is perhaps due to RF design optimization and/or interoperation with 2.4 GHz, such as the two, shared antennas.*
+
 
 ### Not Functional or Not Seen
 
 * serial1 -- not seen (OEM appears as `ttyQHS0`, different than serial0)
 * Bluetooth -- not seen, though no Bluetooth drivers in build
 
-### Untested
-
-* Flashing of image to NAND
-* ROM/overlay images (only initramfs tested at this time)
 
 
 ## Reference Data in ./ea8300
@@ -57,16 +53,6 @@ Output of a locally "decompiled" copy of the device tree from running OEM firmwa
 dtc -I fs -O dts ~/devel/ea8300/2019-02-08/proc/device-tree > OEM-decompiled-device-tree.dts 2> OEM-decompiled-device-tree.dts.stderr
 ```
 
-## Branch Point off OpenWrt `master`
-
-At this time, this work is based off
-
-```
-commit 26fcc937f7e0b8b40297c2d63ae7a17d996f30b1 (tag: ea8300-branch-point, openwrt/master, openwrt/HEAD)
-Author: Stijn Tintel <redacted>
-Date:   Tue Feb 5 04:34:01 2019 +0200
-```
-I have yet to decide how to handle any future OpenWrt commits that directly impact this work. 
 
 ## TODO
 
@@ -75,30 +61,36 @@ I have yet to decide how to handle any future OpenWrt commits that directly impa
 #### High Priority
 
 * Switch configuration
-* Primary MAC address extraction from `devinfo` partition
-* MAC address generation for additional interfaces
-* Get wireless *working* for both IPQ4019 and QCA9888
-* "sysupgrade" image generation and testing
-* "Factory" image generation and testing
-	* Examine OEM firmware to determine if `scripts/linksys-image.sh` is applicable ("footer" from OEM images seem to suggest "close enough" to work)
-* Add QCA9888 firmware to default images
+* Evaluate ART and ART + board approaches
+	* Two board files for IPQ4019
+	* Board file for QCA9888
+	* What about multiple jurisdictions???
+* Limit QCA9888 frequencies in DTS, consistent with ART/board
+* firstboot doesn't seem to erase the overlay
+* Strangeness with not switching boot choice on sysupgrade
+  * mtd13 ==> 11, OK
+  * mtd11 ==> 13, fails first time, then works
+* bootarg overrides
+
 
 #### Lower Priority
 
-* Examine USB reset/hang behavior seen with `nanddump -f /mnt/some.bin /dev/mtd10 2>& 1 | tee /mnt/some.log` (and other large partitions; not seen with `dd` from `/dev/zero`)
+* Tune wireless performance
+* Initialize /etc/config/wireless "better" (ch. 100 or higher for QCA9888)
 * Install Bluetooth drivers and evaluate (see OEM boot-log segment below)
 * OEM enables serial1 as `ttyQHS0`
 * Examine OEM for additional devices worth implementing
 * Determine if hardware RNG and crypto facilities can be / are being used
-* Add "panic" LED to DTS
-* USB hang/reset under load
+* Consider moving ART extraction to early procd
 * OEM firmware resets USB power and Ethernet in early run-time
 	* Where are the regulator or reset controls?
 	* Why is this being done?
-* Check "key" operation and DTS
 * What is `Dakota Chip version 0x1401` (OEM boot log)
-* Consider adding U-Boot environment tools and config to image
-
+* Figure out how to handle multiple jurisdiction's board files
+* USB LED trigger
+* Default LED triggers
+* "f" on console doesn't enter failsafe
+* Resolve why "fail-over" boot isn't working (even with OEM firmware present)
 
 
 ### Cleanliness / Style
@@ -113,6 +105,11 @@ I have yet to decide how to handle any future OpenWrt commits that directly impa
 * Determine appropriate use of "dallas" vs. "ea8300"
 	* *As described at [1], please don't use "linksys,ea8300", but "linksys,dallas". The ea6350 should have used linksys,civic as well -- will likely get around poking people about these again.*
 		* [1] [https://patchwork.ozlabs.org/patch/731469/](https://patchwork.ozlabs.org/patch/731469/) 
+
+### Crazy Talk
+
+* Custom U-Boot with web interface
+* Use "native" extraction of ART data
 
 ---
 
@@ -137,6 +134,32 @@ Bluetooth: HCI BCSP protocol initialized
 
 ## Change Log
 
+### 2019-03-02
+
+* IPQ4019 and QCA9888 radios functional
+* Primary MAC address extraction from `devinfo` partition
+* MAC address generation for additional Ethernet interface
+* MAC address generation for wireless interfaces
+* Added "panic" LED to DTS
+* Added U-Boot environment tools and config to image `/dev/mtd7 0x0 0x40000 0x20000`
+* "sysupgrade" image generation and sysupgrade work
+* "Factory" image generation and flashing work (needs U-Boot environment at this time)
+* Button functionality confirmed for reset and WPS
+* Merged changes in `master`
+
+The issues with QCA9888 stability seem to have been resolved upstream around Feb 28 - Mar 1
+
+The previous USB reset/hang behavior seen with `nanddump -f /mnt/some.bin /dev/mtd10 2>& 1 | tee /mnt/some.log` (and other large partitions; not seen with `dd` from `/dev/zero`) appears to have been a media problem. Debian is hanging on `sync` after write of a large file to same media. `badblocks` on that media reports numerous errors.
+
+Based off:
+
+```
+commit bc97257ffefd560d7e77fec8c6ac9d3745ea9f11
+Author: Daniel Golle <daniel@makrotopia.org>
+Date:   Sat Mar 2 19:24:22 2019 +0100
+```
+
+
 ### 2019-02-12 -- Inital Revision
 
 Device boots and runs initramfs image from U-Boot `tftp` and `bootm`.
@@ -157,45 +180,42 @@ Tested with both at10k and ath10k-ct drivers. Drivers appear to initialize, but 
 
 See also [Firmware lacks feature flag indicating a retry limit of > 2 is OK, requested limit: 4](https://forum.openwrt.org/t/ath10k-firmware-lacks-feature-flag/31198?u=jeff) with respect to the ath10k-ct driver/firmware.
 
-#### Building Image
+Based off:
+
+```
+commit 26fcc937f7e0b8b40297c2d63ae7a17d996f30b1
+Author: Stijn Tintel <redacted>
+Date:   Tue Feb 5 04:34:01 2019 +0200
+```
+
+
+## Building Image
 
 Configure and build as any other OpenWrt image.
 
-#### Booting Image
+## Installing Image
 
-Without additional arguments the TFTP server is expected at 192.168.1.254 with a file name of `C0A80101.img`. Default configuration of `loadaddr` of 8400000 is functional.
+Without additional arguments the TFTP server is expected at 192.168.1.254 with a file name of `C0A80101.img`. Default configuration of `loadaddr` of `8400000` is functional.
 
-Copy `bin/targets/ipq40xx/generic/openwrt-ipq40xx-linksys_ea8300-initramfs-fit-zImage.itb` to `C0A80101.img` in your TFTP server's directory (or to the target of a symlink of that name). 
+Copy `bin/targets/ipq40xx/generic/openwrt-ipq40xx-linksys_ea8300-squashfs-factory.bin` to `C0A80101.img` in your TFTP server's directory (or to the target of a symlink of that name). 
 
-Access the serial console (see the OpenWrt wiki page, referenced near the top of this page) and rrestart the router.
+Access the serial console (see the OpenWrt wiki page, referenced near the top of this page) and restart the router, being ready to stop when U-Boot begind to run.
 
-At least for my serial adapter, I can hit [space] before `Hit any key to stop autoboot` appears and it will stop, waiting for commands.
+At least for my serial adapter, I can hit [space] once U-Boot starts and before `Hit any key to stop autoboot` appears and it will stop, waiting for commands.
 
-```
-Hit any key to stop autoboot:  0 
-(IPQ40xx) # tftp
-eth0 PHY0 up Speed :1000 Full duplex
-eth0 PHY1 Down Speed :10 Half duplex
-eth0 PHY2 Down Speed :10 Half duplex
-eth0 PHY3 Down Speed :10 Half duplex
-eth0 PHY4 Down Speed :10 Half duplex
-*** Warning: no boot file name; using 'C0A80101.img'
-Using eth0 device
-TFTP from server 192.168.1.254; our IP address is 192.168.1.1
-Filename 'C0A80101.img'.
-Load address: 0x84000000
-Loading: #################################################################
-         #################################################################
-         #################################################################
-         #################################################################
-         #################################################################
-         #################################################################
-         ########################################################
-done
-Bytes transferred = 6533904 (63b310 hex)
-(IPQ40xx) # bootm
+Flash the image to the primary firmware partition with `run flashimg`. Either confirm/adjust `boot_part` to be persisted as `1` or also flash the same image to the secondary firmware partition with `run flashimg2`.
+
+Take note of the current values of `partbootargs` and `partbootargs2` to allow a later return to OEM firmware. Set and persist the U-Boot environment the new bootargs
 
 ```
+partbootargs=ubi.mtd=11 root=/dev/ubiblock0_0
+partbootargs2=ubi.mtd=13 root=/dev/ubiblock0_0
+```
+
+Boot into the partitition selected by `boot_part` with `run bootcmd`
+
+Further firmware changes (flip-flop flashing) can be performed using `sysupgrade`, with the caveat of the somewhat puzzling behavior when expecting to transition from mtd11 (primary) to mtd13 (secondary) noted 
+
 
 ## References
 

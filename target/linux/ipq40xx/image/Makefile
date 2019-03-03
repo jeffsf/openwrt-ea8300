@@ -213,8 +213,10 @@ define Device/linksys_ea8300
 	IMAGE_SIZE := 89128960    # 0x5800000
 	BLOCKSIZE := 128k
 	PAGESIZE := 2048
-	IMAGES := sysupgrade.bin factory.bin
-	IMAGE/factory.bin := append-kernel | pad-to $$$${KERNEL_SIZE} | append-ubi | linksys-image type=EA8300
+	IMAGES := sysupgrade.bin factory.bin combined.bin
+	IMAGE/factory.bin  := append-kernel | pad-to $$$${KERNEL_SIZE} | append-ubi | linksys-image type=EA8300
+	IMAGE/combined.bin := append-kernel | pad-to $$$${KERNEL_SIZE} | append-ubi
+	DEVICE_PACKAGES := uboot_envtools
 endef
 TARGET_DEVICES += linksys_ea8300
 

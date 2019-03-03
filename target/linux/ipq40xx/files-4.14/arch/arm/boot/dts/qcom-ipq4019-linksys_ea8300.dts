@@ -42,6 +42,7 @@
 	
 	chosen {
 		// stdout-path = "serial0:115200n8";    // set in dk07.1.dtsi
+		bootargs = "ubi.mtd=11 root=/dev/ubiblock0_0";
 		bootargs-append = " clk_ignore_unused";
 	};
 
@@ -122,8 +123,36 @@
 		pci@40000000 {			// pcie0
 			status = "okay";
 
+			// First tries
 			perst-gpio = <&tlmm 38 GPIO_ACTIVE_LOW>;
 			wake-gpio = <&tlmm 50 GPIO_ACTIVE_LOW>;
+
+			// Recognizes device, still fails
+//			perst-gpio = <&tlmm 38 GPIO_ACTIVE_LOW>;
+//			wake-gpio = <&tlmm 40 GPIO_ACTIVE_LOW>;
+
+			// Recognizes device, still fails
+//			perst-gpio = <&tlmm 38 GPIO_ACTIVE_LOW>;
+//			wake-gpio = <&tlmm 40 GPIO_ACTIVE_HIGH>;
+
+			// From GPL sources -- doesn't recognize
+//			perst-gpio = <&tlmm 38 0>;
+//			wake-gpio = <&tlmm 40 0>;
+//			clkreq-gpio = <&tlmm 39 0>;
+
+			bridge@0,0 {
+				reg = <0x00000000 0 0 0 0>;
+				#address-cells = <3>;
+				#size-cells = <2>;
+				ranges;
+
+				wifi2: wifi@1,0 {
+					compatible = "qcom,ath10k";
+					status = "okay";
+					reg = <0x00010000 0 0 0 0>;
+					// qcom,ath10k-calibration-variant = "<some string>";
+				};
+			};
 		};
 
 		// Enabled in dk07.1-c1.dts
@@ -166,36 +195,43 @@
 					partition@0 {		// OEM: 0:SBL1
 						label = "0:SBL1";
 						reg = <0x0 0x100000>;
+						read-only;
 					};
 
 					partition@100000 {	// OEM: 0:MIBIB
 						label = "0:MIBIB";
 						reg = <0x100000 0x100000>;
+						read-only;
 					};
 
 					partition@200000 {	// OEM: 0:QSEE
 						label = "0:QSEE";
 						reg = <0x200000 0x100000>;
+						read-only;
 					};
 
 					partition@300000 {	// OEM: 0:CDT
 						label = "0:CDT";
 						reg = <0x300000 0x80000>;
+						read-only;
 					};
 
 					partition@380000 {	// OEM: 0:APPSBLENV
 						label = "0:APPSBLENV";
 						reg = <0x380000 0x80000>;
+						read-only;
 					};
 
 					partition@400000 {	// OEM: 0:ART
 						label = "0:ART";
 						reg = <0x400000 0x80000>;
+						read-only;
 					};
 
 					partition@480000 {	// OEM: 0:APPSBL
 						label = "0:APPSBL";
 						reg = <0x480000 0x200000>;
+						read-only;
 					};
 
 					partition@680000 {	// OEM: u_env
@@ -206,11 +242,13 @@
 					partition@700000 {	// OEM: s_env
 						label = "s_env";
 						reg = <0x700000 0x40000>;
+						read-only;
 					};
 
 					partition@740000 {	// OEM: devinfo
 						label = "devinfo";
 						reg = <0x740000 0x40000>;
+						read-only;
 					};
 
 					partition@780000 {	// OEM: kernel
@@ -236,11 +274,13 @@
 					partition@b780000 {	// OEM: sysdiag
 						label = "sysdiag";
 						reg = <0xb780000 0x100000>;
+						read-only;
 					};
 
 					partition@b880000 {	// OEM: syscfg
 						label = "syscfg";
 						reg = <0xb880000 0x4680000>;
+						read-only;
 					};
 				};
 			};

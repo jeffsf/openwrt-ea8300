@@ -95,6 +95,14 @@ board=$(board_name)
 
 echo "$0: Extracting $FIRMWARE for $board"
 
+case "$board" in
+	linksys,ea8300)
+		# base_mac=$(mtd_get_mac_ascii devinfo hw_mac_addr)
+		base_mac=$(cat /sys/class/net/eth0/address)    # Assumed set up here by now
+		;;
+esac
+
+
 case "$FIRMWARE" in
 "ath10k/cal-pci-0000:01:00.0.bin")
 	case "$board" in
@@ -114,6 +122,9 @@ case "$FIRMWARE" in
 		;;
 	linksys,ea8300)
 		ath10kcal_extract "0:ART" 36864 12064  # 0x9000
+		# and update with base_mac + 4
+		# OEM firmware only uses 4 consecutive MAC addresses
+		ath10kcal_patch_mac_crc $(macaddr_setbit_la $(macaddr_add "${base_mac}" 4))
 		;;
 	openmesh,a62)
 		ath10kcal_extract "0:ART" 36864 12064
@@ -141,7 +152,7 @@ case "$FIRMWARE" in
 		;;
 	avm,fritzbox-7530)
 		/usr/bin/fritz_cal_extract -i 1 -s 0x3C000 -e 0x207 -l 12064 -o /lib/firmware/$FIRMWARE $(find_mtd_chardev "urlader0") || \
-		    /usr/bin/fritz_cal_extract -i 1 -s 0x3C000 -e 0x207 -l 12064 -o /lib/firmware/$FIRMWARE $(find_mtd_chardev "urlader1")
+		/usr/bin/fritz_cal_extract -i 1 -s 0x3C000 -e 0x207 -l 12064 -o /lib/firmware/$FIRMWARE $(find_mtd_chardev "urlader1")
 		;;
 	compex,wpj428 |\
 	engenius,eap1300 |\
@@ -153,6 +164,8 @@ case "$FIRMWARE" in
 		;;
 	linksys,ea8300)
 		ath10kcal_extract "0:ART" 4096 12064  # 0x1000
+		# and update with base_mac + 2
+		ath10kcal_patch_mac_crc $(macaddr_add "${base_mac}" 2)
 		;;
 	meraki,mr33)
 		ath10kcal_ubi_extract "ART" 4096 12064
@@ -204,6 +217,8 @@ case "$FIRMWARE" in
 		;;
 	linksys,ea8300)
 		ath10kcal_extract "0:ART" 20480 12064  # 0x5000
+		# and update with base_mac + 3
+		ath10kcal_patch_mac_crc $(macaddr_add "${base_mac}" 3)
 		;;
 	meraki,mr33)
 		ath10kcal_ubi_extract "ART" 20480 12064

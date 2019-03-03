@@ -1,0 +1,31 @@
+--- a/arch/arm/boot/compressed/atags_to_fdt.c
++++ b/arch/arm/boot/compressed/atags_to_fdt.c
+@@ -119,6 +119,13 @@ int atags_to_fdt(void *atag_list, void *
+ 	if ((u32)atag_list & 0x3)
+ 		return 1;
+ 
++	/* let's give it all the room it could need */
++	ret = fdt_open_into(fdt, fdt, total_space);
++	if (ret < 0)
++		return ret;
++
++	setprop_string(fdt, "/chosen", "atf_called", "yes");
++
+ 	/* if we get a DTB here we're done already */
+ 	if (*(u32 *)atag_list == fdt32_to_cpu(FDT_MAGIC))
+ 	       return 0;
+@@ -129,10 +136,10 @@ int atags_to_fdt(void *atag_list, void *
+ 	     atag->hdr.size != 2))
+ 		return 1;
+ 
+-	/* let's give it all the room it could need */
+-	ret = fdt_open_into(fdt, fdt, total_space);
+-	if (ret < 0)
+-		return ret;
++	/* /\* let's give it all the room it could need *\/ */
++	/* ret = fdt_open_into(fdt, fdt, total_space); */
++	/* if (ret < 0) */
++	/* 	return ret; */
+ 
+ 	for_each_tag(atag, atag_list) {
+ 		if (atag->hdr.tag == ATAG_CMDLINE) {

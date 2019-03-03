@@ -16,11 +16,10 @@ START=99
 boot() {
 	. /lib/functions.sh
 
-	local tag="zlinksys_recovery DEVELOPER MODE -- REMOVE FOR RELEASES:"
+	local tag="zlinksys_recovery DEVELOPER MODE -- REMOVE FOR RELEASES"
 
 	case $(board_name) in
-		linksys,ea6350v3|\
-		linksys,ea8300)
+		linksys,ea6350v3)
 			# make sure auto_recovery in uboot is always on
 			IS_AUTO_RECOVERY="$(fw_printenv -n auto_recovery)"
 			if [ "$IS_AUTO_RECOVERY" != "yes" ] ; then

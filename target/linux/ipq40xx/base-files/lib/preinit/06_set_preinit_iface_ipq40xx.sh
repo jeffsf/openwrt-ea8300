@@ -7,7 +7,8 @@ set_preinit_iface() {
 	meraki,mr33)
 		ifname=lan
 		;;
-	linksys,ea8300)
+	linksys,ea8300| \
+	linksys,mr8300)
 		ifname=lan1
 		;;
         asus,rt-ac42u| \
@@ -15,7 +16,6 @@ set_preinit_iface() {
 	avm,fritzbox-4040| \
 	ezviz,cs-w3-wd1200g-eup| \
 	glinet,gl-b1300| \
-	linksys,mr8300| \
 	zyxel,nbg6617)
 		ifname=eth0
 		;;
